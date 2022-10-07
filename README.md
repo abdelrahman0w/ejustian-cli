@@ -42,13 +42,36 @@ A command line interface app that allows EJUST students to manage all their stuf
 
 ## Current Features
 
-```
-```
+- [ ] Scrape SIS Data
+  - [ ] Name
+  - [ ] ID
+  - [ ] Faculty
+  - [ ] Degree
+  - [ ] Major
+  - [ ] Level
+  - [ ] Enrollment Status
+  - [ ] Academic Status
+  - [ ] Total Passed CH
+  - [ ] Total Needed CH
+  - [ ] CGPA
+- [ ] Attendance Tracker
+- [ ] Task Manager (Kanban Style)
+- [ ] Show Student Schedule
+- [ ] Extract Student Schedule to Calendar
+- [ ] Google Classroom CLI
+- [ ] Useful Emails
+- [ ] All '@ejust.edu.eg' Emails 
 
 ## Upcoming Features
 
-```
-```
+- In-Lecture Note Taking
+- Course Grade Tracker
+- Personal Vault
+- Resume Builder
+- Internships Checker
+- Connect to Nearest WiFi
+- Services in Borg El-Arab
+- Built-In Mailer
 
 ## Limitations
 
