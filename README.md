@@ -54,24 +54,34 @@ A command line interface app that allows EJUST students to manage all their stuf
   - [ ] Total Passed CH
   - [ ] Total Needed CH
   - [ ] CGPA
+- [ ] Google Classroom CLI
+  - [ ] Join a Class
+  - [ ] Show TO-DO
+  - [ ] Show Classes
+  - [ ] Submit Assignment
+  - [ ] Check Grades
+  - [ ] Check Assignment Grade
+  - [ ] Show Class Materials
+  - [ ] Show Class Posts
 - [ ] Attendance Tracker
 - [ ] Task Manager (Kanban Style)
 - [ ] Show Student Schedule
 - [ ] Extract Student Schedule to Calendar
-- [ ] Google Classroom CLI
 - [ ] Useful Emails
 - [ ] All '@ejust.edu.eg' Emails 
 
 ## Upcoming Features
 
-- In-Lecture Note Taking
-- Course Grade Tracker
-- Personal Vault
-- Resume Builder
-- Internships Checker
-- Connect to Nearest WiFi
-- Services in Borg El-Arab
-- Built-In Mailer
+- [ ] In-Lecture Note Taking
+- [ ] Course Grade Tracker
+- [ ] Personal Vault
+- [ ] Resume Builder
+- [ ] Resume Scanner
+- [ ] Resume ATS Checker
+- [ ] Internships Checker
+- [ ] Connect to Nearest WiFi
+- [ ] Services in Borg El-Arab
+- [ ] Built-In Mailer
 
 ## Limitations
 
