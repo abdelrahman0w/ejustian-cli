@@ -1,7 +1,7 @@
 # ejustian-cli
 
 <p align="center">
-    <img src="./assets/logo.png" width="55%">
+    <img src="./assets/logo.svg" width="35%">
 </p>
 
 ![Badge](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
