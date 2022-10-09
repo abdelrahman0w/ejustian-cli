@@ -66,7 +66,7 @@ ej
 
 ## Features
 
-> Current Features are marked.
+> Current Features are checked
 
 - [X] Scrape SIS Data
   - [X] Name
