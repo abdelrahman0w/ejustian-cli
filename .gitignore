@@ -141,6 +141,7 @@ temp*
 # All in saved folder except for .gitkeep
 **/saved/*
 !**/saved/.gitkeep
+!**/saved/__init__.py
 
 # Kanban DB
 kanban.db

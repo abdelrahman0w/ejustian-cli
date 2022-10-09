@@ -15,7 +15,7 @@ setup(
     version='0.1.0',
     author='Abdelrahman Abdelkhalek, Maria Gadelkarim',
     author_email='abdelrahman0w@gmail.com, maria.gamal13@gmail.com',
-    packages=['ej_cli'],
+    packages=['ej_cli', 'ej_cli.sis', 'ej_cli.kanban', 'ej_cli.saved'],
     entry_points={
         'console_scripts': [
             'ej = ej_cli.__main__:main'
