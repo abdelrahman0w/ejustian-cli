@@ -15,6 +15,8 @@
   - [Description](#description)
   - [Dependencies](#dependencies)
   - [Installation](#installation)
+    - [Method 1](#method-1-direct-installation)
+    - [Method 2](#method-2-clone-and-install-manually)
   - [Usage](#usage)
   - [Current Features](#current-features)
   - [Upcoming Features](#upcoming-features)
@@ -27,33 +29,61 @@ A command line interface app that allows EJUST students to manage all their stuf
 
 ## Dependencies
 
-```
-```
+- Python>=3.7.* ([Installation Guide](https://docs.python.org/3/using/index.html))
+- pip>=20.0.* ([Installation Guide](https://pip.pypa.io/en/stable/installation/))
 
 ## Installation
 
+### Method 1: Direct Installation
+
+```shell
+pip install git+https://github.com/Abdelrahman0W/ejustian-cli.git
 ```
-```
+
+### Method 2: Clone and Install Manually
+
+1. Clone this repo
+
+    ```shell
+    git clone https://github.com/Abdelrahman0W/ejustian-cli.git
+    ```
+1. Change directory
+
+    ```shell
+    cd ejustian-cli
+    ```
+1. Install using `pip`
+
+    ```shell
+    pip install .
+    ```
 
 ## Usage
 
-```
+To use the app use the following command in your terminal
+
+```shell
+ej
 ```
 
-## Current Features
+## Features
 
-- [ ] Scrape SIS Data
-  - [ ] Name
-  - [ ] ID
-  - [ ] Faculty
-  - [ ] Degree
-  - [ ] Major
-  - [ ] Level
-  - [ ] Enrollment Status
-  - [ ] Academic Status
-  - [ ] Total Passed CH
-  - [ ] Total Needed CH
-  - [ ] CGPA
+> Current Features are marked.
+
+- [X] Scrape SIS Data
+  - [X] Name
+  - [X] ID
+  - [X] Faculty
+  - [X] Degree
+  - [X] Major
+  - [X] Level
+  - [X] Enrollment Status
+  - [X] Academic Status
+  - [X] Total Passed CH
+  - [X] Remaining CH
+  - [X] CGPA
+- [X] Attendance Tracker
+- [X] Task Manager (Kanban Style)
 - [ ] Google Classroom CLI
   - [ ] Join a Class
   - [ ] Show TO-DO
@@ -63,15 +93,10 @@ A command line interface app that allows EJUST students to manage all their stuf
   - [ ] Check Assignment Grade
   - [ ] Show Class Materials
   - [ ] Show Class Posts
-- [ ] Attendance Tracker
-- [ ] Task Manager (Kanban Style)
 - [ ] Show Student Schedule
 - [ ] Extract Student Schedule to Calendar
 - [ ] Useful Emails
 - [ ] All '@ejust.edu.eg' Emails 
-
-## Upcoming Features
-
 - [ ] In-Lecture Note Taking
 - [ ] Course Grade Tracker
 - [ ] Personal Vault
@@ -82,11 +107,6 @@ A command line interface app that allows EJUST students to manage all their stuf
 - [ ] Connect to Nearest WiFi
 - [ ] Services in Borg El-Arab
 - [ ] Built-In Mailer
-
-## Limitations
-
-```
-```
 
 ## Contributors
 
