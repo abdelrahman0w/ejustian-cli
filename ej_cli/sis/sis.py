@@ -17,6 +17,7 @@ class SIS:
     def __init__(self, id: str, pwd: str, save_credentials: bool = True, new_pwd: bool = False) -> None:
         self.id = id
         self.pwd = pwd
+        self.save_credentials = save_credentials
         self.__data = {}
         self.__session = None
         self.__authenticated = False
@@ -27,7 +28,7 @@ class SIS:
             os.remove(os.path.join(
                 PARENT_DIR, f"saved/{self.id}-credentials.json"))
 
-        if save_credentials and not os.path.exists(
+        if self.save_credentials and not os.path.exists(
             os.path.join(PARENT_DIR, f"saved/{self.id}-credentials.json")
         ):
             with open(
@@ -170,7 +171,8 @@ class SIS:
             }
 
             self.__data = data
-            self.save
+            if self.save_credentials:
+                self.save
 
     @property
     def cgpa(self) -> str:
