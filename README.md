@@ -18,9 +18,7 @@
     - [Method 1](#method-1-direct-installation)
     - [Method 2](#method-2-clone-and-install-manually)
   - [Usage](#usage)
-  - [Current Features](#current-features)
-  - [Upcoming Features](#upcoming-features)
-  - [Limitations](#limitations)
+  - [Features](#features)
   - [Contributors](#contributors)
 
 ## Description
