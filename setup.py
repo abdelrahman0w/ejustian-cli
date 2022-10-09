@@ -23,6 +23,10 @@ setup(
     },
     include_package_data=True,
     python_requires=">=3.7.*",
-    install_requires=["requests", "beautifulsoup4", "python-kanban"],
+    install_requires=[
+        "requests", "beautifulsoup4",
+        "python-kanban", "tabulate",
+        "bullet"
+    ],
     license='MIT',
 )

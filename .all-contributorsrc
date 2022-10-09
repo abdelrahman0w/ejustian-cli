@@ -1,0 +1,20 @@
+{
+    "projectName": "ejustian-cli",
+    "contributors": [
+        {
+            "login": "MariaGamal",
+            "name": "Maria Gamal",
+            "avatar_url": "https://avatars.githubusercontent.com/u/69156891",
+            "profile": "https://github.com/MariaGamal"
+        },
+        {
+            "login": "Abdelrahman0W",
+            "name": "Abdelrahman Wael",
+            "avatar_url": "https://avatars.githubusercontent.com/u/20213927",
+            "profile": "https://github.com/Abdelrahman0W"
+        }
+    ],
+    "repoType": "github",
+    "contributorsPerLine": 2,
+    "repoHost": "https://github.com"
+}

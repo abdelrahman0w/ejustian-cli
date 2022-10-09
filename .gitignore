@@ -131,8 +131,16 @@ dmypy.json
 # Specified as local
 local*
 
-# Temp directory
-tmp
+# Temp directories and files
+tmp*
+temp*
 
 # VS code
 .vscode
+
+# All in saved folder except for .gitkeep
+**/saved/*
+!**/saved/.gitkeep
+
+# Kanban DB
+kanban.db
