@@ -1,7 +1,7 @@
 # ejustian-cli
 
 <p align="center">
-    <img src="./assets/logo.svg" width="35%">
+    <img src="./assets/logo.png" width="35%">
 </p>
 
 ![Badge](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
@@ -27,7 +27,7 @@ A command line interface app that allows EJUST students to manage all their stuf
 
 ## Dependencies
 
-- Python>=3.7.* ([Installation Guide](https://docs.python.org/3/using/index.html))
+- Python>=3.8.* ([Installation Guide](https://docs.python.org/3/using/index.html))
 - pip>=20.0.* ([Installation Guide](https://pip.pypa.io/en/stable/installation/))
 
 ## Installation
