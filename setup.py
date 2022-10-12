@@ -29,7 +29,7 @@ setup(
     install_requires=[
         "requests", "beautifulsoup4",
         "python-kanban", "tabulate",
-        "inquirer"
+        "inquirer", "lxml"
     ],
     license='MIT',
 )
