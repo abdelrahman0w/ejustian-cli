@@ -50,7 +50,7 @@ class SIS:
         host = f"{self.host}/Default.aspx"
         login_page = self.__req(
             session=session, url=host)
-        soup = BeautifulSoup(login_page.content, features="html5lib")
+        soup = BeautifulSoup(login_page.content, "lxml")
         VIEWSTATE = soup.find(id="__VIEWSTATE")["value"]
         VIEWSTATEGENERATOR = soup.find(id="__VIEWSTATEGENERATOR")["value"]
         EVENTVALIDATION = soup.find(id="__EVENTVALIDATION")["value"]
