@@ -28,8 +28,8 @@ setup(
     python_requires=">=3.8.*",
     install_requires=[
         "requests", "beautifulsoup4",
-        "python-kanban", "tabulate",
-        "inquirer", "lxml"
+        "lxml", "inquirer",
+        "tabulate", "python-kanban",
     ],
     license='MIT',
 )
