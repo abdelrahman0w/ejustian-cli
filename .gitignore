@@ -145,3 +145,6 @@ temp*
 
 # Kanban DB
 kanban.db
+
+# WiFi API
+api

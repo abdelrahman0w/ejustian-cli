@@ -2,6 +2,7 @@ import os
 import json
 import inquirer
 from .sis.sis import SIS
+from .map.map import MAP
 from .loader.loader import Loader
 from .kanban.kanban import start_kanban
 
@@ -168,6 +169,8 @@ def main() -> None:
                 "Show your credit hours (Passed CH, Remaining CH)",
                 "Attendance tracker",
                 "Task manager (kanban style)",
+                "Connect to the nearest WiFi",
+                "E-JUST map",
                 "Exit",
             ],
         )
@@ -203,6 +206,10 @@ def main() -> None:
                 print("\n\n" + "\033[0m" + user.attendance + "\n")
         elif user_choice == "Task manager (kanban style)":
             start_kanban()
+        elif user_choice == "Connect to the nearest WiFi":
+            continue
+        elif user_choice == "E-JUST map":
+            print(MAP)
 
 
 if __name__ == "__main__":
