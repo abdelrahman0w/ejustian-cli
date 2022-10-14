@@ -17,7 +17,8 @@ setup(
     author_email='abdelrahman0w@gmail.com, maria.gamal13@gmail.com',
     packages=[
         'ej_cli', 'ej_cli.sis', 'ej_cli.loader',
-        'ej_cli.kanban', 'ej_cli.saved'
+        'ej_cli.map', 'ej_cli.wifi', 'ej_cli.kanban',
+        'ej_cli.saved'
     ],
     entry_points={
         'console_scripts': [

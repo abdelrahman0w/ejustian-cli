@@ -82,6 +82,7 @@ ej
   - [X] CGPA
 - [X] Attendance Tracker
 - [X] Task Manager (Kanban Style)
+- [X] E-JUST Map
 - [ ] Google Classroom CLI
   - [ ] Join a Class
   - [ ] Show TO-DO
