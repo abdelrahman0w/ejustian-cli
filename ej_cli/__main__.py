@@ -1,6 +1,7 @@
 import os
 import json
 import inquirer
+from typing import Union
 from .sis.sis import SIS
 from .map.map import MAP
 from .loader.loader import Loader
@@ -77,7 +78,7 @@ def get_credentials(pwd_changed: bool = False):
     return {"id": credentials_ans['id'], "pwd": credentials_ans['pwd']}
 
 
-def student() -> SIS | None:
+def student() -> Union[SIS, None]:
     id_list = [
         file.split("-")[0]
         for file in os.listdir(os.path.join(BASE_DIR, "saved"))
