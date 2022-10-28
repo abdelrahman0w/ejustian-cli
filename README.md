@@ -83,6 +83,7 @@ ej
 - [X] Attendance Tracker
 - [X] Task Manager (Kanban Style)
 - [X] E-JUST Map
+- [X] Connect to Nearest WiFi
 - [ ] Google Classroom CLI
   - [ ] Join a Class
   - [ ] Show TO-DO
@@ -103,7 +104,6 @@ ej
 - [ ] Resume Scanner
 - [ ] Resume ATS Checker
 - [ ] Internships Checker
-- [ ] Connect to Nearest WiFi
 - [ ] Services in Borg El-Arab
 - [ ] Built-In Mailer
 
