@@ -23,6 +23,10 @@ class AttendanceTracker():
         if course_code not in self.attendance.keys(): raise ValueError("Course does not exists")
         else : del self.attendance[course_code]
 
+    def remove_all_course(self) -> None:
+        for course_code  in self.attendance.keys():
+            del self.attendance[course_code]
+
     def increment_attendance(self, course_code:str)-> None:
         if course_code not in self.attendance.keys(): raise ValueError("Course does not exists")
         else: self.attendance[course_code] += 1
@@ -41,4 +45,3 @@ class AttendanceTracker():
     
     def __repr__(self) -> str: 
         return str(self.attendance)
-    
