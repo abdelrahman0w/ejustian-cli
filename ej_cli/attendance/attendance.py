@@ -1,10 +1,15 @@
 import json
 from prettytable import PrettyTable
-
+from typing import *
 class AttendanceTracker():
+
     def __init__(self) -> None: 
-        with open("attendance.json", "a+") as f:
-            self.attendance = json.load(f) if f.read() else dict()
+        try : 
+            with open("attendance.json","r" ) as f:
+                self.attendance = json.load(f)
+        except IOError: 
+            with open("attendance.json", "w+") as f:
+                self.attendance = dict()
 
     def save(self) -> None:
         with open("attendance.json", "w+") as f:
