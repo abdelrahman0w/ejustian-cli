@@ -30,7 +30,7 @@ setup(
     install_requires=[
         "requests", "beautifulsoup4",
         "lxml", "inquirer",
-        "tabulate", "python-kanban","prettytable",
+        "tabulate", "python-kanban",
     ],
     license='MIT',
 )
