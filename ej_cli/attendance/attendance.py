@@ -1,5 +1,5 @@
 import json
-from prettytable import PrettyTable
+from tabulate import tabulate
 from typing import *
 class AttendanceTracker():
 
@@ -7,7 +7,7 @@ class AttendanceTracker():
         try : 
             with open("attendance.json","r" ) as f:
                 self.attendance = json.load(f)
-        except IOError: 
+        except Exception: 
             with open("attendance.json", "w+") as f:
                 self.attendance = dict()
 
@@ -37,11 +37,9 @@ class AttendanceTracker():
         else: self.attendance[course_code] -= 1
         
     def __str__(self) -> str:
-        attendance_table = PrettyTable()
-        attendance_table.field_names= ['Course Code / Course Name','# of times of absences']
-        for course_code , number_of_absences in self.attendance.items():
-            attendance_table.add_row([course_code, number_of_absences])
-        return attendance_table.get_string()
+        table_headers= ['Course Code / Course Name','# of times of absences']
+        attendance_table = tabulate(self.attendance.items(), headers=table_headers,tablefmt='pretty')
+        return str(attendance_table)
     
     def __repr__(self) -> str: 
         return str(self.attendance)

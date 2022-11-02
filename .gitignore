@@ -148,3 +148,6 @@ kanban.db
 
 # WiFi API
 api
+
+# Attendance Data
+attendance.json
