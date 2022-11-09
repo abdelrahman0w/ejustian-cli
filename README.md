@@ -87,6 +87,7 @@ ej
 - [X] E-JUST Map
 - [X] Connect to Nearest WiFi
 - [X] Show Student Schedule
+- [X] Export Student Schedule to PDF
 - [ ] Extract Student Schedule to Calendar
 - [ ] Google Classroom CLI
   - [ ] Join a Class
@@ -98,7 +99,7 @@ ej
   - [ ] Show Class Materials
   - [ ] Show Class Posts
 - [ ] Useful Emails
-- [ ] All '@ejust.edu.eg' Emails 
+- [ ] All '@ejust.edu.eg' Emails
 - [ ] In-Lecture Note Taking
 - [ ] Course Grade Tracker
 - [ ] Personal Vault
