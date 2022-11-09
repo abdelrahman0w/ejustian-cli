@@ -182,7 +182,7 @@ class SIS:
         )
 
     @property
-    def __get_attendance(self):
+    def __get_attendance(self) -> dict:
         with requests.Session() as crnt_session:
             self.__authenticate(session=crnt_session)
             attendance_res = self.__req(
@@ -283,3 +283,72 @@ class SIS:
             )
 
             return re.findall(matches["advisor_name"], advisor_res.text)[0]
+
+    @property
+    def __get_calendar(self) -> dict:
+        with requests.Session() as crnt_session:
+            self.__authenticate(session=crnt_session)
+            student_calendar = self.__req(
+                session=crnt_session,
+                url=f"{self.host}/UI/StudentView/StudCourseTime.aspx"
+            )
+
+        week_days = re.findall(matches["cal_week_days"], student_calendar.text)
+        data_table = {}
+
+        for week_day in week_days:
+            day = re.findall(matches["cal_day"], week_day)[0]
+            courses_codes = re.findall(matches["cal_courses_codes"], week_day)
+            courses_names = re.findall(matches["cal_courses_names"], week_day)
+            courses_types = re.findall(matches["cal_courses_types"], week_day)
+            times = re.findall(matches["cal_times"], week_day)
+            buildings = re.findall(matches["cal_buildings"], week_day)
+            rooms = re.findall(matches["cal_rooms"], week_day)
+            instructors = re.findall(matches["cal_instructors"], week_day)
+            data_table[day] = [
+                {
+                    "Course Name": course_name,
+                    "Course Code": course_code,
+                    "Course Type": course_type,
+                    "Course Time": course_time,
+                    "Course Venu": f"{building} - {room}",
+                    "Course Instructor": instructor
+                } for
+                course_code,
+                course_name,
+                course_type,
+                course_time,
+                building,
+                room,
+                instructor in zip(
+                    courses_codes,
+                    courses_names,
+                    courses_types,
+                    times,
+                    buildings,
+                    rooms,
+                    instructors
+                )
+            ]
+
+        return data_table
+
+    @property
+    def calendar(self) -> str:
+        data_table = self.__get_calendar
+        table_headers = [
+            'Day', 'Course Name', 'Course Code',
+            'Course Type', 'Course Time', 'Course Venu',
+            'Course Instructor'
+        ]
+        table = []
+
+        for day, courses in data_table.items():
+            table.extend(
+                [
+                    day, course['Course Name'], course['Course Code'], course['Course Type'],
+                    course['Course Time'], course['Course Venu'], course['Course Instructor']
+                ] for course in courses
+            )
+
+        return tabulate(table, headers=table_headers, tablefmt="rst")
