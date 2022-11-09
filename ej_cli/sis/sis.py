@@ -352,3 +352,47 @@ class SIS:
             )
 
         return tabulate(table, headers=table_headers, tablefmt="rst")
+
+    @property
+    def export_calendar(self) -> None:
+        data_table = self.__get_calendar
+        table_headers = [
+            'Day', 'Course Name', 'Course Code',
+            'Course Type', 'Course Time', 'Course Venu',
+            'Course Instructor'
+        ]
+        table = []
+
+        for day, courses in data_table.items():
+            table.extend(
+                [
+                    day, course['Course Name'], course['Course Code'], course['Course Type'],
+                    course['Course Time'], course['Course Venu'], course['Course Instructor']
+                ] for course in courses
+            )
+
+        final_table = tabulate(table, headers=table_headers, tablefmt="github")
+
+        with open(os.path.join(BASE_DIR, "calendar.md"), "r") as f:
+            md_data = f.read()
+
+        md_data = md_data.replace("{{ID}}", self.id)
+        md_data = md_data.replace("{{TABLE}}", final_table)
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+        data = {
+            'markdown': md_data,
+            'engine': 'pdflatex',
+        }
+
+        with requests.Session() as crnt_session:
+            res = self.__req(
+                session=crnt_session, method="post",
+                url="https://md-to-pdf.fly.dev",
+                headers=headers,
+                data=data
+            )
+
+        with open(os.path.join(os.getcwd(), f'{self.id}-schedule.pdf'), 'wb') as f:
+            f.write(res.content)
