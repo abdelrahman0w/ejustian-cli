@@ -13,8 +13,8 @@ setup(
     long_description=readme,
     long_description_content_type='text/markdown',
     version='0.1.0',
-    author='Abdelrahman Abdelkhalek, Maria Gadelkarim',
-    author_email='abdelrahman0w@gmail.com, maria.gamal13@gmail.com',
+    author='Abdelrahman Abdelkhalek',
+    author_email='abdelrahman0w@gmail.com',
     packages=[
         'ej_cli', 'ej_cli.sis', 'ej_cli.loader',
         'ej_cli.map', 'ej_cli.wifi', 'ej_cli.kanban',

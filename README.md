@@ -81,9 +81,13 @@ ej
   - [X] Remaining CH
   - [X] CGPA
 - [X] Attendance Tracker
+- [X] Personal Attendance Tracker
+- [X] Show Student Advisor
 - [X] Task Manager (Kanban Style)
 - [X] E-JUST Map
 - [X] Connect to Nearest WiFi
+- [X] Show Student Schedule
+- [ ] Extract Student Schedule to Calendar
 - [ ] Google Classroom CLI
   - [ ] Join a Class
   - [ ] Show TO-DO
@@ -93,8 +97,6 @@ ej
   - [ ] Check Assignment Grade
   - [ ] Show Class Materials
   - [ ] Show Class Posts
-- [ ] Show Student Schedule
-- [ ] Extract Student Schedule to Calendar
 - [ ] Useful Emails
 - [ ] All '@ejust.edu.eg' Emails 
 - [ ] In-Lecture Note Taking
@@ -109,6 +111,7 @@ ej
 
 ## Contributors
 
-|<img src="https://avatars.githubusercontent.com/u/69156891" width="155px" height="155px">|<img src="https://avatars.githubusercontent.com/u/20213927" width="155px" height="155px">|
-|:-:|:-:|
-|[**Maria Gamal**](https://github.com/MariaGamal)|[**Abdelrahman Wael**](https://github.com/Abdelrahman0W)|
+|<img src="https://avatars.githubusercontent.com/u/69156891" width="155px" height="155px">|<img src="https://avatars.githubusercontent.com/u/20213927" width="155px" height="155px">|<img src="https://avatars.githubusercontent.com/u/23258101" width="155px" height="155px">|<img src="https://avatars.githubusercontent.com/u/46817360" width="155px" height="155px">|
+|:-:|:-:|:-:|:-:|
+|[**Maria Gamal**](https://github.com/MariaGamal)|[**Abdelrahman Wael**](https://github.com/Abdelrahman0W)|[**Tameem Alaa**](https://github.com/tameemalaa)|[**Abdelrahman Nawar**](https://github.com/Nawarrr)|
+
