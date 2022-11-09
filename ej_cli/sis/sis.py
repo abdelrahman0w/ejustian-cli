@@ -50,7 +50,7 @@ class SIS:
         host = f"{self.host}/Default.aspx"
         login_page = self.__req(
             session=session, url=host)
-        soup = BeautifulSoup(login_page.content, features="html5lib")
+        soup = BeautifulSoup(login_page.content, "lxml")
         VIEWSTATE = soup.find(id="__VIEWSTATE")["value"]
         VIEWSTATEGENERATOR = soup.find(id="__VIEWSTATEGENERATOR")["value"]
         EVENTVALIDATION = soup.find(id="__EVENTVALIDATION")["value"]
@@ -212,6 +212,74 @@ class SIS:
 
         return attendance_table
 
-    def advisor(self):
-        # TODO: Implement this
-        pass
+    @property
+    def advisor(self) -> str:
+        with requests.Session() as crnt_session:
+            self.__authenticate(session=crnt_session)
+            advisor_page = self.__req(
+                session=crnt_session,
+                url=f"{self.host}/UI/StudentView/Home.aspx"
+            )
+            soup = BeautifulSoup(advisor_page.content, "lxml")
+            VIEWSTATE = soup.find(id="__VIEWSTATE")['value']
+            VIEWSTATEGENERATOR = soup.find(id="__VIEWSTATEGENERATOR")['value']
+            EVENTVALIDATION = soup.find(id="__EVENTVALIDATION")['value']
+            data = {
+                "ctl00$ScriptManager1": "ctl00$cntphmaster$StudDataGeneralControl1$StudentDtlPopup$ucStudDtlsTabsGnrlCtrl$TabHeader1$updPnlTabs|ctl00$cntphmaster$StudDataGeneralControl1$StudentDtlPopup$ucStudDtlsTabsGnrlCtrl$TabHeader1$rptTabs$ctl00$lnkTab",
+                "ctl00_ASPxPopupControl1WS": "0:0:-1:-10000:-10000:0:-10000:-10000:1",
+                "ctl00$FixNumericBoxProblem": "",
+                "ctl00$txtFixCalendarProblem": "",
+                "ctl00$MaskedBirthDate_ClientState": "",
+                "ctl00$txtSearch": "",
+                "ctl00$cntphmaster$StudDataGeneralControl1$txtInsertMode": False,
+                "ctl00_cntphmaster_StudDataGeneralControl1_StudentDtlPopupWS": "1:1:12000:0:0:0:-10000:-10000:1",
+                "ctl00$cntphmaster$StudDataGeneralControl1$StudentDtlPopup$ucStudDtlsTabsGnrlCtrl$TabHeader1$txtTabLvl": "1",
+                "ctl00$cntphmaster$StudDataGeneralControl1$StudentDtlPopup$ucStudDtlsTabsGnrlCtrl$TabHeader1$Tab_UcStudentAcademicDataTabs_1$drpDegreeFac": "425",
+                "ctl00$cntphmaster$StudDataGeneralControl1$StudentDtlPopup$ucStudDtlsTabsGnrlCtrl$TabHeader1$Tab_UcStudentAcademicDataTabs_1$ucTabHeader$txtTabLvl": "2",
+                "ctl00_cntphmaster_StudDataGeneralControl1_StudentDtlPopup_ucStudDtlsTabsGnrlCtrl_StudentDtlPopupWS": "0:0:-1:-10000:-10000:0:999px:-10000:1",
+                "ctl00_cntphmaster_StudDataGeneralControl1_StudentDtlAfcmPopupWS": "0:0:-1:-10000:-10000:0:-10000:-10000:1",
+                "ctl00$cntphmaster$StudDataGeneralControl1$StudentDtlAfcmPopup$StudDtlsTabsGnrlCtrlAfcm$TabHeader1$txtTabLvl": "1",
+                "ctl00$cntphmaster$StudDataGeneralControl1$StudentDtlAfcmPopup$StudDtlsTabsGnrlCtrlAfcm$TabHeader1$Tab_UcStudentBasicDataTabs_0$ucTabHeader$txtTabLvl": "2",
+                "ctl00$cntphmaster$StudDataGeneralControl1$StudentDtlAfcmPopup$StudDtlsTabsGnrlCtrlAfcm$TabHeader1$Tab_UcStudentBasicDataTabs_0$ucTabHeader$Tab_StudBasicData_View_0$txtStudId": "425",
+                "ctl00$cntphmaster$StudDataGeneralControl1$StudentDtlAfcmPopup$StudDtlsTabsGnrlCtrlAfcm$TabHeader1$Tab_UcStudentBasicDataTabs_0$ucTabHeader$Tab_StudBasicData_View_0$txthiddenStudID": "ED_STUD_ID=425",
+                "ctl00$cntphmaster$StudDataGeneralControl1$StudentDtlAfcmPopup$StudDtlsTabsGnrlCtrlAfcm$TabHeader1$Tab_UcStudentBasicDataTabs_0$ucTabHeader$Tab_StudBasicData_View_0$UpdatedStudID": "425",
+                "ctl00_cntphmaster_StudDataGeneralControl1_StudentDtlAfcmPopup_StudDtlsTabsGnrlCtrlAfcm_StudentDtlPopupWS": "0:0:-1:-10000:-10000:0:999px:-10000:1",
+                "ctl00$cntphmaster$hdnid": True,
+                "ctl00_cntphmaster_PopupStudPalnWS": "0:0:-1:-10000:-10000:0:850px:-10000:1",
+                "ctl00$cntphmaster$PopupStudPaln$hidenval": "",
+                "ctl00$cntphmaster$PopupStudPaln$txtStudCode2": "",
+                "ctl00$cntphmaster$PopupStudPaln$txtStudID": "",
+                "ctl00_cntphmaster_popSurveysWS": "0:0:-1:-10000:-10000:0:1000px:80%:1",
+                "ctl00$cntphmaster$popSurveys$hdnchngPassUserId": "",
+                "ctl00$cntphmaster$popSurveys$SurveyControl$txtEntMainId": "",
+                "ctl00$cntphmaster$popSurveys$SurveyControl$txtSvStaffEvlId": "",
+                "ctl00$cntphmaster$popSurveys$SurveyControl$txtSaStfMemberId": "",
+                "ctl00$cntphmaster$popSurveys$SurveyControl$txtEdCourseId": "",
+                "ctl00$cntphmaster$popSurveys$SurveyControl$txtEvalID": "",
+                "ctl00$cntphmaster$popSurveys$SurveyControl$txtstaffId": "",
+                "ctl00_cntphmaster_popSurveysDynWS": "0:0:-1:-10000:-10000:0:1000px:100%:1",
+                "ctl00$cntphmaster$popSurveysDyn$SurveyControlDyn$txtEntMainId": "",
+                "ctl00$cntphmaster$popSurveysDyn$SurveyControlDyn$txtSvStaffEvlId": "",
+                "ctl00$cntphmaster$popSurveysDyn$SurveyControlDyn$txtSaStfMemberId": "",
+                "ctl00$cntphmaster$popSurveysDyn$SurveyControlDyn$txtEdCourseId": "",
+                "ctl00$cntphmaster$popSurveysDyn$SurveyControlDyn$txtstaffId": "",
+                "ctl00$txthdndegreeclassctrl_Ids": "0",
+                "DXScript": "1_42,1_74,1_67,1_64",
+                "__EVENTTARGET": "ctl00$cntphmaster$StudDataGeneralControl1$StudentDtlPopup$ucStudDtlsTabsGnrlCtrl$TabHeader1$rptTabs$ctl01$lnkTab",
+                "__EVENTARGUMENT": "",
+                "__LASTFOCUS": "",
+                "__VIEWSTATE": VIEWSTATE,
+                "__VIEWSTATEGENERATOR": VIEWSTATEGENERATOR,
+                "__EVENTVALIDATION": EVENTVALIDATION,
+                "__VIEWSTATEENCRYPTED": "",
+                "__ASYNCPOST": True,
+            }
+
+            advisor_res = self.__req(
+                session=crnt_session,
+                method="post",
+                url=f"{self.host}/UI/StudentView/Home.aspx",
+                data=data,
+            )
+
+            return re.findall(matches["advisor_name"], advisor_res.text)[0]

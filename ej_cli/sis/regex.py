@@ -22,4 +22,5 @@ matches = {
     "courses_names": "\s*\"ctl00_cntphmaster_grdAttendanceFW_ct.*_Label2\">(.*?)(?=</)",
     "absence_times": "\s*\"ctl00_cntphmaster_grdAttendanceFW_ct.*_Label3\">(.*?)(?=</)",
     "warnings": "\s*\"ctl00_cntphmaster_grdAttendanceFW_ct.*_Label4\">(.*?)(?=</)",
+    "advisor_name": "\s*\"ctl00_cntphmaster_StudDataGeneralControl1_StudentDtlPopup_ucStudDtlsTabsGnrlCtrl_TabHeader1_Tab_UcStudentAcademicDataTabs_1_ucTabHeader_Tab_StudAcadData_View_0_LblAcadAdvisorName\">(.*?)(?=<\/)",
 }
