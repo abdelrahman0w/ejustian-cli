@@ -144,7 +144,6 @@ temp*
 !**/saved/__init__.py
 
 # Kanban DB
-
 kanban.db
 
 # WiFi API
