@@ -144,6 +144,7 @@ temp*
 !**/saved/__init__.py
 
 # Kanban DB
+
 kanban.db
 
 # WiFi API
@@ -151,3 +152,6 @@ api
 
 # Attendance Data
 attendance.json
+
+# Credentials
+credentials.json
