@@ -311,7 +311,7 @@ class SIS:
                     "Course Code": course_code,
                     "Course Type": course_type,
                     "Course Time": course_time,
-                    "Course Venu": f"{building} - {room}",
+                    "Course Venue": f"{building} - {room}",
                     "Course Instructor": instructor
                 } for
                 course_code,
@@ -338,17 +338,17 @@ class SIS:
         data_table = self.__get_calendar
         table_headers = [
             'Day', 'Course Name', 'Course Code',
-            'Course Type', 'Course Time', 'Course Venu',
+            'Course Type', 'Course Time', 'Course Venue',
             'Course Instructor'
         ]
         table = []
 
-        for day, courses in data_table.items():
+        for day, day_classes in data_table.items():
             table.extend(
                 [
-                    day, course['Course Name'], course['Course Code'], course['Course Type'],
-                    course['Course Time'], course['Course Venu'], course['Course Instructor']
-                ] for course in courses
+                    day, day_class['Course Name'], day_class['Course Code'], day_class['Course Type'],
+                    day_class['Course Time'], day_class['Course Venue'], day_class['Course Instructor']
+                ] for day_class in day_classes
             )
 
         return tabulate(table, headers=table_headers, tablefmt="rst")
@@ -358,17 +358,17 @@ class SIS:
         data_table = self.__get_calendar
         table_headers = [
             'Day', 'Course Name', 'Course Code',
-            'Course Type', 'Course Time', 'Course Venu',
+            'Course Type', 'Course Time', 'Course Venue',
             'Course Instructor'
         ]
         table = []
 
-        for day, courses in data_table.items():
+        for day, day_classes in data_table.items():
             table.extend(
                 [
-                    day, course['Course Name'], course['Course Code'], course['Course Type'],
-                    course['Course Time'], course['Course Venu'], course['Course Instructor']
-                ] for course in courses
+                    day, day_class['Course Name'], day_class['Course Code'], day_class['Course Type'],
+                    day_class['Course Time'], day_class['Course Venue'], day_class['Course Instructor']
+                ] for day_class in day_classes
             )
 
         final_table = tabulate(table, headers=table_headers, tablefmt="github")
