@@ -151,3 +151,6 @@ api
 
 # Attendance Data
 attendance.json
+
+# Credentials
+credentials.json
