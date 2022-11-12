@@ -1,7 +1,6 @@
 import os
 import json
 from .myos import PLATFORM, ARCHITECTURE
-from .user import User
 from .linuxwifi import LinuxWiFi
 from .winwifi import WinWiFi
 from .macwifi import MacWiFi

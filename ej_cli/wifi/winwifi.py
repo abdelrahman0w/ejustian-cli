@@ -1,5 +1,7 @@
 import subprocess
 import re
+
+
 class WinWiFi:
     def __init__(self) -> None:
         self.networks = {}
@@ -8,7 +10,7 @@ class WinWiFi:
         """
         Check if the WiFi is active.
         """
-        command = f'netsh wlan show interfaces | findstr "State"'
+        command = 'netsh wlan show interfaces | findstr "State"'
         result = subprocess.run(command, shell=True, capture_output=True)
         return 'connected' in result.stdout.decode().lower()
 
@@ -18,19 +20,20 @@ class WinWiFi:
         Scan for WiFi networks and return the password of 
         the strongest network if it's locally known.
         """
-        command = f'netsh wlan show networks mode=bssid | findstr "^SSID Signal"'
+        command = 'netsh wlan show networks mode=bssid | findstr "^SSID Signal"'
         result = subprocess.run(command, shell=True, capture_output=True)
         x = re.findall(r'B?SSID.*|Signal.*', result.stdout.decode())
         # print(x)
         i = 0
         while i < len(x):
-            if x[i][0:4] == 'SSID':
+            if x[i][:4] == 'SSID':
                 # print(x[i])
                 ssid = re.findall(r':.*', x[i])[0].strip(': ').rstrip()
                 signals = []
                 i += 1
-                while i < len(x) and x[i][0:6] == 'Signal':
-                    signals.append(int(re.findall(r':.*', x[i])[0].strip(': ').replace('%', '')))
+                while i < len(x) and x[i][:6] == 'Signal':
+                    signals.append(
+                        int(re.findall(r':.*', x[i])[0].strip(': ').replace('%', '')))
                     i += 1
                 self.networks[ssid] = max(signals)
         return self.networks
@@ -42,7 +45,7 @@ class WinWiFi:
         """
         if not self.is_active():
             return False
-        command = f'netsh wlan show interfaces | findstr "SSID"'
+        command = 'netsh wlan show interfaces | findstr "SSID"'
         result = subprocess.run(command, shell=True, capture_output=True)
         return ssid in result.stdout.decode()
 
@@ -52,10 +55,3 @@ class WinWiFi:
         """
         command = f'netsh wlan connect name="{ssid}" ssid="{ssid}" key="{pwd}"'
         subprocess.run(command, shell=True, capture_output=True)
-
-
-
-test = WinWiFi()
-print(test.is_active())
-print(test.scan)
-print(test.is_connected_to('Finance'))

@@ -1,6 +1,6 @@
 import requests
 from pydantic import BaseModel
-from exceptions import AuthenticationError
+from .exceptions import AuthenticationError
 
 
 class Data(BaseModel):
