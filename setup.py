@@ -19,6 +19,7 @@ setup(
         'ej_cli', 'ej_cli.sis', 'ej_cli.loader',
         'ej_cli.map', 'ej_cli.wifi', 'ej_cli.kanban',
         'ej_cli.saved', 'ej_cli.attendance', 'ej_cli.classroom',
+        'ej_cli.auth',
     ],
     entry_points={
         'console_scripts': [
