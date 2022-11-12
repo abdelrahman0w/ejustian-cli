@@ -6,6 +6,8 @@ import requests
 from bs4 import BeautifulSoup
 from tabulate import tabulate
 from .regex import matches
+from .schedule import Course, WeekDay, Schedule
+from .gcalendar import Calendar
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -285,7 +287,7 @@ class SIS:
             return re.findall(matches["advisor_name"], advisor_res.text)[0]
 
     @property
-    def __get_calendar(self) -> dict:
+    def __get_calendar(self) -> Schedule:
         with requests.Session() as crnt_session:
             self.__authenticate(session=crnt_session)
             student_calendar = self.__req(
@@ -294,90 +296,100 @@ class SIS:
             )
 
         week_days = re.findall(matches["cal_week_days"], student_calendar.text)
-        data_table = {}
+        tmp_cal = []
 
         for week_day in week_days:
-            day = re.findall(matches["cal_day"], week_day)[0]
+            crnt_day = re.findall(matches["cal_day"], week_day)[0]
             courses_codes = re.findall(matches["cal_courses_codes"], week_day)
             courses_names = re.findall(matches["cal_courses_names"], week_day)
             courses_types = re.findall(matches["cal_courses_types"], week_day)
             times = re.findall(matches["cal_times"], week_day)
-            buildings = re.findall(matches["cal_buildings"], week_day)
+            buildings = map(
+                lambda x: x.replace("Building ", "B"),
+                re.findall(matches["cal_buildings"], week_day)
+            )
             rooms = re.findall(matches["cal_rooms"], week_day)
             instructors = re.findall(matches["cal_instructors"], week_day)
-            data_table[day] = [
-                {
-                    "Course Name": course_name,
-                    "Course Code": course_code,
-                    "Course Type": course_type,
-                    "Course Time": course_time,
-                    "Course Venue": f"{building} - {room}",
-                    "Course Instructor": instructor
-                } for
-                course_code,
-                course_name,
-                course_type,
-                course_time,
-                building,
-                room,
-                instructor in zip(
-                    courses_codes,
-                    courses_names,
-                    courses_types,
-                    times,
-                    buildings,
-                    rooms,
-                    instructors
-                )
-            ]
-
-        return data_table
-
-    @property
-    def calendar(self) -> str:
-        data_table = self.__get_calendar
-        table_headers = [
-            'Day', 'Course Name', 'Course Code',
-            'Course Type', 'Course Time', 'Course Venue',
-            'Course Instructor'
-        ]
-        table = []
-
-        for day, day_classes in data_table.items():
-            table.extend(
-                [
-                    day, day_class['Course Name'], day_class['Course Code'], day_class['Course Type'],
-                    day_class['Course Time'], day_class['Course Venue'], day_class['Course Instructor']
-                ] for day_class in day_classes
+            day = WeekDay(
+                day=crnt_day,
+                courses=[
+                    Course(
+                        code=course_code,
+                        name=course_name,
+                        type=course_type,
+                        time=time,
+                        venue=f"{building} - {room}",
+                        instructor=instructor,
+                    ) for
+                    course_code,
+                    course_name,
+                    course_type,
+                    time,
+                    building,
+                    room,
+                    instructor in zip(
+                        courses_codes,
+                        courses_names,
+                        courses_types,
+                        times,
+                        buildings,
+                        rooms,
+                        instructors
+                    )
+                ]
             )
 
-        return tabulate(table, headers=table_headers, tablefmt="rst")
+            tmp_cal.append(day)
+
+        return Schedule(week_days=tmp_cal)
 
     @property
-    def export_calendar(self) -> None:
-        data_table = self.__get_calendar
-        table_headers = [
-            'Day', 'Course Name', 'Course Code',
-            'Course Type', 'Course Time', 'Course Venue',
-            'Course Instructor'
-        ]
-        table = []
-
-        for day, day_classes in data_table.items():
-            table.extend(
+    def show_calendar(self):
+        return tabulate(
+            tabular_data=[
                 [
-                    day, day_class['Course Name'], day_class['Course Code'], day_class['Course Type'],
-                    day_class['Course Time'], day_class['Course Venue'], day_class['Course Instructor']
-                ] for day_class in day_classes
-            )
+                    day.day,
+                    course.code,
+                    course.name,
+                    course.type,
+                    course.time,
+                    course.venue,
+                    course.instructor,
+                ] for day in self.__get_calendar.week_days for course in day.courses
+            ],
+            headers=[
+                "Day", "Course Code", "Course Name",
+                "Course Type", "Time", "Venue", "Instructor"
+            ],
+            tablefmt="rst"
+        )
 
-        final_table = tabulate(table, headers=table_headers, tablefmt="github")
+    @property
+    def pdf_calendar(self) -> None:
+        table = tabulate(
+            tabular_data=[
+                [
+                    day.day,
+                    course.code,
+                    course.name,
+                    course.type,
+                    course.time,
+                    course.venue,
+                    course.instructor,
+                ] for day in self.__get_calendar.week_days for course in day.courses
+            ],
+            headers=[
+                "Day", "Course Code", "Course Name",
+                "Course Type", "Time", "Venue", "Instructor"
+            ],
+            tablefmt="github"
+        )
 
         with open(os.path.join(BASE_DIR, "calendar.md"), "r") as f:
             md_data = f.read()
 
         md_data = md_data.replace("{{ID}}", self.id)
-        md_data = md_data.replace("{{TABLE}}", final_table)
+        md_data = md_data.replace("{{TABLE}}", table)
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
         }
@@ -396,3 +408,9 @@ class SIS:
 
         with open(os.path.join(os.getcwd(), f'{self.id}-schedule.pdf'), 'wb') as f:
             f.write(res.content)
+
+    @property
+    def export_calendar(self):
+        cal = self.__get_calendar
+        google_cal = Calendar(cal=cal)
+        google_cal.export
