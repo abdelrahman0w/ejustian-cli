@@ -5,6 +5,7 @@
 </p>
 
 ![Badge](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Badge](https://github.com/Abdelrahman0W/ejustian-cli/actions/workflows/codeql.yml/badge.svg)
 
 ![Badge](https://img.shields.io/github/repo-size/Abdelrahman0W/ejustian-cli?style=for-the-badge)
 ![Badge](https://img.shields.io/github/last-commit/Abdelrahman0W/ejustian-cli?style=for-the-badge)
