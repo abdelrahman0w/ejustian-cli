@@ -6,6 +6,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org/)
 [![License: MIT](https://img.shields.io/github/license/Abdelrahman0W/ejustian-cli?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Python Package](https://github.com/Abdelrahman0W/ejustian-cli/actions/workflows/python-package.yml/badge.svg)](https://github.com/Abdelrahman0W/ejustian-cli/actions/workflows/python-package.yml)
 [![CodeQL](https://github.com/Abdelrahman0W/ejustian-cli/actions/workflows/codeql.yml/badge.svg)](https://github.com/Abdelrahman0W/ejustian-cli/actions/workflows/codeql.yml)
 
 ![Repo Size](https://img.shields.io/github/repo-size/Abdelrahman0W/ejustian-cli?style=for-the-badge)
