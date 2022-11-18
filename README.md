@@ -4,13 +4,13 @@
     <img src="./assets/logo.png" width="35%">
 </p>
 
-![Badge](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Badge](https://github.com/Abdelrahman0W/ejustian-cli/actions/workflows/codeql.yml/badge.svg)
+[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org/)
+[![License: MIT](https://img.shields.io/github/license/Abdelrahman0W/ejustian-cli?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![CodeQL](https://github.com/Abdelrahman0W/ejustian-cli/actions/workflows/codeql.yml/badge.svg)](https://github.com/Abdelrahman0W/ejustian-cli/actions/workflows/codeql.yml)
 
-![Badge](https://img.shields.io/github/repo-size/Abdelrahman0W/ejustian-cli?style=for-the-badge)
-![Badge](https://img.shields.io/github/last-commit/Abdelrahman0W/ejustian-cli?style=for-the-badge)
-![Badge](https://img.shields.io/github/contributors/Abdelrahman0W/ejustian-cli?style=for-the-badge)
-![Badge](https://img.shields.io/github/all-contributors/Abdelrahman0W/ejustian-cli?style=for-the-badge)
+![Repo Size](https://img.shields.io/github/repo-size/Abdelrahman0W/ejustian-cli?style=for-the-badge)
+![Last Commit](https://img.shields.io/github/last-commit/Abdelrahman0W/ejustian-cli?style=for-the-badge)
+![Contributors](https://img.shields.io/github/contributors/Abdelrahman0W/ejustian-cli?style=for-the-badge)
 
 - [ejustian-cli](#ejustian-cli)
   - [Description](#description)
@@ -89,7 +89,7 @@ ej
 - [X] Connect to Nearest WiFi
 - [X] Show Student Schedule
 - [X] Export Student Schedule to PDF
-- [ ] Extract Student Schedule to Calendar
+- [X] Export Student Schedule to Calendar
 - [ ] Google Classroom CLI
   - [ ] Join a Class
   - [ ] Show TO-DO
