@@ -480,5 +480,9 @@ class EJUSTIAN:
         pass
 
 
+def main() -> EJUSTIAN:
+    return EJUSTIAN()
+
+
 if __name__ == "__main__":
-    EJUSTIAN()
+    main()
