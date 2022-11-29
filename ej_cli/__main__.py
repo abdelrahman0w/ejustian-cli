@@ -2,216 +2,483 @@ import os
 import json
 import inquirer
 from typing import Union
-from .sis.sis import SIS
-from .map.map import MAP
-from .loader.loader import Loader
+import time
+
+from .auth.user import User
 from .kanban.kanban import start_kanban
+from .loader.loader import Loader
+from .map.map import MAP
+from .sis.sis import SIS
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = os.path.dirname(BASE_DIR)
-FIRST_USE = next(
-    (
-        False for file in os.listdir(os.path.join(BASE_DIR, "saved"))
-        if file.endswith("-credentials.json")
-    ),
-    True
-)
 
 
-def welcome() -> None:
-    print(
-        """
-        \r███████╗     ██╗██╗   ██╗ ██████╗████████╗██╗ █████╗ ███╗  ██╗
-        \r██╔════╝     ██║██║   ██║██╔════╝╚══██╔══╝██║██╔══██╗████╗ ██║
-        \r█████╗       ██║██║   ██║╚█████╗    ██║   ██║███████║██╔██╗██║
-        \r██╔══╝  ██╗  ██║██║   ██║ ╚═══██╗   ██║   ██║██╔══██║██║╚████║
-        \r███████╗╚█████╔╝╚██████╔╝██████╔╝   ██║   ██║██║  ██║██║ ╚███║
-        \r╚══════╝ ╚════╝  ╚═════╝ ╚═════╝    ╚═╝   ╚═╝╚═╝  ╚═╝╚═╝  ╚══╝
-        \r                     █████╗ ██╗     ██╗
-        \r                    ██╔══██╗██║     ██║
-        \r                    ██║  ╚═╝██║     ██║
-        \r                    ██║  ██╗██║     ██║
-        \r                    ╚█████╔╝███████╗██║
-        \r                     ╚════╝ ╚══════╝╚═╝
-        """
-    )
-    print("Welcome to EJUSTIAN CLI!")
-    print("The command line interface app that allows EJUST students to manage all their stuff\n")
+class EJUSTIAN:
+    def __init__(self) -> None:
+        self.__welcome
+        self.__delete_older_than(30)
+        self.__main_menu
 
+    @property
+    def __first_use(self) -> bool:
+        return not os.path.exists(os.path.join(BASE_DIR, "saved", "USED"))
 
-def get_credentials(pwd_changed: bool = False):
-    if pwd_changed:
+    @property
+    def __used(self) -> None:
+        if not self.__first_use:
+            return
+
+        with open(os.path.join(BASE_DIR, "saved", "USED"), "w"):
+            pass
+
+        print("It seems like this is your first time using EJUSTIAN CLI.")
+        print("Some services might need an active internet connection.")
+        print("Currently we use SIS credentials for authentication.")
+        print("You have to be an EJUSTIAN to be able to use all features.")
+        print("So, some options will ask for your SIS credentials.")
+        print("Note: If saved, your credentials are stored locally and are only used to log you in to SIS.")
+        print("They are never sent to any third party.\n")
+
+    def __auth_ejustian(self, uid: str, pwd: str) -> None:
+        user = User(uid, pwd).auth
+
+        try:
+            wifi_list = user.wifi_list
+            gcp_creds = user.gcp_creds
+
+            with open(os.path.join(BASE_DIR, "saved", "credentials.json"), "w") as f:
+                json.dump(
+                    gcp_creds,
+                    f,
+                    indent=4
+                )
+
+            with open(os.path.join(BASE_DIR, "saved", "wifi.json"), "w") as f:
+                json.dump(
+                    wifi_list,
+                    f,
+                    indent=4
+                )
+        except Exception as e:
+            print(e)
+
+    @staticmethod
+    def __delete_older_than(days: int) -> None:
+        saved_files = os.listdir(os.path.join(BASE_DIR, "saved"))
+
+        for file in saved_files:
+            if not file.endswith("-info.json"):
+                continue
+
+            file_path = os.path.join(os.path.join(BASE_DIR, "saved", file))
+
+            if os.path.getmtime(file_path) < (time.time() - (days * 86400)):
+                os.remove(file_path)
+
+    @property
+    def __get_credentials(self) -> Union[dict, None]:
         credentials_questions = [
-            inquirer.Password(
-                "pwd", message="Please Enter Your New SIS Password")
+            inquirer.Text("id", message="Please Enter Your ID"),
+            inquirer.Password("pwd", message="Please Enter Your SIS Password"),
+            inquirer.Confirm(
+                "save", message="Save Your Credentials for Future Use?", default=True),
         ]
         credentials_ans = inquirer.prompt(credentials_questions)
-        return credentials_ans["pwd"]
 
-    credentials_questions = [
-        inquirer.Text("id", message="Please Enter Your ID"),
-        inquirer.Password("pwd", message="Please Enter Your SIS Password"),
-        inquirer.List(
-            "save",
-            message="Save Your Credentials for Future Use?",
-            choices=["Yes", "No"],
-            default="Yes"
-        ),
-    ]
-    credentials_ans = inquirer.prompt(credentials_questions)
-    save_credentials = credentials_ans["save"] == "Yes"
-    credentials_path = os.path.join(
-        BASE_DIR,
-        "saved",
-        f"{credentials_ans['id']}-credentials.json"
-    )
+        try:
+            with Loader(
+                "Please wait while setting things up...",
+                "Thanks for waiting!"
+            ):
+                self.__auth_ejustian(
+                    credentials_ans["id"], credentials_ans["pwd"]
+                )
 
-    if save_credentials and not os.path.exists(credentials_path):
-        with open(credentials_path, "w") as f:
-            json.dump(
-                {"id": credentials_ans['id'], "pwd": credentials_ans['pwd']},
-                f,
-                indent=4
-            )
+                if credentials_ans["save"]:
+                    credentials_path = os.path.join(
+                        BASE_DIR,
+                        "saved",
+                        f"{credentials_ans['id']}-credentials.json"
+                    )
 
-    return {"id": credentials_ans['id'], "pwd": credentials_ans['pwd']}
+                    with open(credentials_path, "w") as f:
+                        json.dump(
+                            {
+                                "id": credentials_ans['id'],
+                                "pwd": credentials_ans['pwd']
+                            },
+                            f,
+                            indent=4
+                        )
 
+            return credentials_ans
+        except Exception as e:
+            print(e)
 
-def student() -> Union[SIS, None]:
-    id_list = [
-        file.split("-")[0]
-        for file in os.listdir(os.path.join(BASE_DIR, "saved"))
-        if file.endswith("-credentials.json")
-    ]
-    id_list.extend(["Use a New ID", "Back"])
-    id_menu = [
-        inquirer.List(
-            'ids',
-            message="Which ID do you want to use?",
-            choices=id_list
+            try_again = [
+                inquirer.Confirm(
+                    "try_again", message="Try Again?", default=True
+                )
+            ]
+
+            if inquirer.prompt(try_again)["try_again"]:
+                self.__get_credentials
+            else:
+                exit()
+
+    @property
+    def __reset(self):
+        saved_files = os.listdir(os.path.join(BASE_DIR, "saved"))
+        exclude = ["__init__.py", ".gitkeep",
+                   "wifi.json", "credentials.json"]
+
+        for file in saved_files:
+            if file in exclude:
+                continue
+
+            file_path = os.path.join(os.path.join(BASE_DIR, "saved", file))
+
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+
+    @property
+    def __welcome(self) -> None:
+        print(
+            """
+            \r███████╗     ██╗██╗   ██╗ ██████╗████████╗██╗ █████╗ ███╗  ██╗
+            \r██╔════╝     ██║██║   ██║██╔════╝╚══██╔══╝██║██╔══██╗████╗ ██║
+            \r█████╗       ██║██║   ██║╚█████╗    ██║   ██║███████║██╔██╗██║
+            \r██╔══╝  ██╗  ██║██║   ██║ ╚═══██╗   ██║   ██║██╔══██║██║╚████║
+            \r███████╗╚█████╔╝╚██████╔╝██████╔╝   ██║   ██║██║  ██║██║ ╚███║
+            \r╚══════╝ ╚════╝  ╚═════╝ ╚═════╝    ╚═╝   ╚═╝╚═╝  ╚═╝╚═╝  ╚══╝
+            \r                     █████╗ ██╗     ██╗
+            \r                    ██╔══██╗██║     ██║
+            \r                    ██║  ╚═╝██║     ██║
+            \r                    ██║  ██╗██║     ██║
+            \r                    ╚█████╔╝███████╗██║
+            \r                     ╚════╝ ╚══════╝╚═╝
+            """
         )
-    ]
-    id_choice = inquirer.prompt(id_menu)["ids"]
+        print("Welcome to EJUSTIAN CLI!")
+        print("The command line interface app that allows EJUST students to manage all their stuff\n")
 
-    if id_choice == "Back":
-        return
+        self.__used
 
-    if id_choice == "Use a New ID":
-        user_creds = get_credentials()
-    else:
-        with open(
-            os.path.join(
-                BASE_DIR, "saved", f"{id_choice}-credentials.json"
-            ), "r"
-        ) as f:
-            user_creds = json.load(f)
-
-        pwd_changed = [
-            inquirer.List(
-                "save",
-                message="Did You Change Your Password?",
-                choices=["No", "Yes"],
-                default="No"
-            ),
+    @property
+    def __student(self) -> Union[SIS, None]:
+        id_list = [
+            file.split("-")[0]
+            for file in os.listdir(os.path.join(BASE_DIR, "saved"))
+            if file.endswith("-credentials.json")
         ]
-        changed = inquirer.prompt(pwd_changed)["save"] == "Yes"
-        if changed:
-            os.remove(
+        id_list.extend(["Use a New ID", "Back"])
+        id_menu = [
+            inquirer.List(
+                'ids',
+                message="Which ID do you want to use?",
+                choices=id_list
+            )
+        ]
+        id_choice = inquirer.prompt(id_menu)["ids"]
+
+        if id_choice == "Back":
+            return
+
+        if id_choice == "Use a New ID":
+            user_creds = self.__get_credentials
+        else:
+            with open(
                 os.path.join(
                     BASE_DIR, "saved", f"{id_choice}-credentials.json"
+                ), "r"
+            ) as f:
+                user_creds = json.load(f)
+
+            pwd_changed = [
+                inquirer.Confirm(
+                    "pwd_changed", message="Did You Change Your Password?", default=False
                 )
-            )
-            user_creds["pwd"] = get_credentials(True)
-            save_pwd = [
-                inquirer.List(
-                    "save",
-                    message="Save Your New Credentials for Future Use?",
-                    choices=["Yes", "No"],
-                    default="Yes"
-                ),
             ]
-            save = inquirer.prompt(save_pwd)["save"] == "Yes"
-            if save:
-                with open(
+
+            if inquirer.prompt(pwd_changed)["pwd_changed"]:
+                os.remove(
                     os.path.join(
                         BASE_DIR, "saved", f"{id_choice}-credentials.json"
-                    ), "w"
-                ) as f:
-                    json.dump(user_creds, f, indent=4)
+                    )
+                )
 
-    return SIS(user_creds["id"], user_creds["pwd"])
+                user_creds = self.__get_credentials
 
+        if user_creds:
+            return SIS(user_creds["id"], user_creds["pwd"])
 
-def main() -> None:
-    welcome()
+    @property
+    def __main_menu(self) -> None:
+        menu = [
+            inquirer.List(
+                "main",
+                message="What do you want to do?",
+                choices=[
+                    "Academic Stuff",
+                    "Personal Stuff",
+                    "EJUST Map",
+                    "Connect to Nearest WiFi",
+                    "Reset Everything",
+                    "Exit"
+                ],
+                default="Academic Stuff"
+            ),
+        ]
 
-    if FIRST_USE:
-        print("It seems like this is your first time using EJUSTIAN CLI or you don't have any saved credentials.")
-        print("Please enter your SIS credentials to get started.")
-        print("Note: Your credentials are stored locally and are only used to log you in to SIS.")
-        print("They are never sent to any third party.")
+        while True:
+            choice = inquirer.prompt(menu)["main"]
 
-        save_data = get_credentials()
-        with Loader("\033[92m" + "Please wait while logging you in..." + "\033[0m", "Thanks for waiting!"):
-            print("\033[0m")
-            SIS(save_data["id"], save_data["pwd"]).info
+            if choice == "Academic Stuff":
+                self.__academic_menu
+            elif choice == "Personal Stuff":
+                self.__personal_menu
+            elif choice == "EJUST Map":
+                self.__ejust_map
+            elif choice == "Connect to Nearest WiFi":
+                self.__wifi
+            elif choice == "Reset Everything":
+                print("This will delete all your saved credentials and data.")
+                reset = [
+                    inquirer.Confirm(
+                        "reset", message="Do You Want to Continue?", default=False
+                    )
+                ]
 
-        print("Thank You! You are now ready to use EJUSTIAN CLI.")
-        print("Enjoy!\n")
+                if inquirer.prompt(reset)["reset"]:
+                    with Loader("Resetting...", "Done!\nPlease restart the app"):
+                        self.__reset
+                        exit()
+            elif choice == "Exit":
+                print("Thank you for using EJUSTIAN CLI!")
+                print("Bye!\n")
+                exit()
 
-    user_options = [
-        inquirer.List(
-            'opts',
-            message="What Do You Want to Do?",
-            choices=[
-                "Show your SIS data (excluding your CGPA, GPA, Passed CH, and Remaining CH)",
-                "Show your CGPA",
-                "Show your credit hours (Passed CH, Remaining CH)",
-                "Attendance tracker",
-                "Task manager (kanban style)",
-                "Connect to the nearest WiFi",
-                "E-JUST map",
-                "Exit",
-            ],
-        )
-    ]
+    @property
+    def __academic_menu(self) -> None:
+        menu = [
+            inquirer.List(
+                "academic",
+                message="What do you want to do?",
+                choices=[
+                    "Academic Information",
+                    "Attendance Tracker",
+                    "Student Schedule",
+                    "Main Menu",
+                    "Exit"
+                ],
+                default="Academic Information"
+            ),
+        ]
 
-    while True:
-        user_choice = inquirer.prompt(user_options)["opts"]
+        while True:
+            choice = inquirer.prompt(menu)["academic"]
 
-        if user_choice == "Exit":
-            print("Thank you for using EJUSTIAN CLI!")
-            print("Bye!\n")
-            break
+            if choice == "Academic Information":
+                self.__info_menu
+            elif choice == "Attendance Tracker":
+                if student := self.__student:
+                    with Loader(
+                        "\033[92m" + "Please wait while getting your data...",
+                        "Thanks for waiting!"
+                    ):
+                        print("\n\n" + "\033[0m" + student.attendance + "\n")
+            elif choice == "Student Schedule":
+                self.__schedule_menu
+            elif choice == "Main Menu":
+                self.__main_menu
+                break
+            elif choice == "Exit":
+                print("Thank you for using EJUSTIAN CLI!")
+                print("Bye!\n")
+                exit()
 
-        if user_choice == "Show your SIS data (excluding your CGPA, GPA, Passed CH, and Remaining CH)":
-            if not (user := student()):
-                continue
-            with Loader("\033[92m" + "Please wait while getting your data...", "Thanks for waiting!"):
-                print("\n\n" + "\033[0m" + user.info + "\n")
-        elif user_choice == "Show your CGPA":
-            if not (user := student()):
-                continue
-            with Loader("\033[92m" + "Please wait while getting your data...", "Thanks for waiting!"):
-                print("\n\n" + "\033[0m" + user.cgpa + "\n")
-        elif user_choice == "Show your credit hours (Passed CH, Remaining CH)":
-            if not (user := student()):
-                continue
-            with Loader("\033[92m" + "Please wait while getting your data...", "Thanks for waiting!"):
-                print("\n\n" + "\033[0m" + user.credit_hours + "\n")
-        elif user_choice == "Attendance tracker":
-            if not (user := student()):
-                continue
-            with Loader("\033[92m" + "Please wait while getting your data...", "Thanks for waiting!"):
-                print("\n\n" + "\033[0m" + user.attendance + "\n")
-        elif user_choice == "Task manager (kanban style)":
-            start_kanban()
-        elif user_choice == "Connect to the nearest WiFi":
-            continue
-        elif user_choice == "E-JUST map":
-            print(MAP)
+    @property
+    def __info_menu(self):
+        menu = [
+            inquirer.List(
+                "info",
+                message="What do you want to do?",
+                choices=[
+                    "Your SIS Info (excluding your CGPA, GPA, Passed CH, and Remaining CH)",
+                    "Your CGPA",
+                    "Your Credit Hours (Passed CH, Remaining CH)",
+                    "Your Academic Advisor",
+                    "Back to Previous Menu",
+                    "Main Menu",
+                    "Exit"
+                ],
+                default="Your SIS Info (excluding your CGPA, GPA, Passed CH, and Remaining CH)"
+            ),
+        ]
+
+        while True:
+            choice = inquirer.prompt(menu)["info"]
+
+            if choice == "Your SIS Info (excluding your CGPA, GPA, Passed CH, and Remaining CH)":
+                if student := self.__student:
+                    with Loader(
+                        "\033[92m" + "Please wait while getting your data...",
+                        "Thanks for waiting!"
+                    ):
+                        print("\n\n" + "\033[0m" + student.info + "\n")
+            elif choice == "Your CGPA":
+                if student := self.__student:
+                    with Loader(
+                        "\033[92m" + "Please wait while getting your data...",
+                        "Thanks for waiting!"
+                    ):
+                        print("\n\n" + "\033[0m" + student.cgpa + "\n")
+            elif choice == "Your Credit Hours (Passed CH, Remaining CH)":
+                if student := self.__student:
+                    with Loader(
+                        "\033[92m" + "Please wait while getting your data...",
+                        "Thanks for waiting!"
+                    ):
+                        print("\n\n" + "\033[0m" + student.credit_hours + "\n")
+            elif choice == "Your Academic Advisor":
+                if student := self.__student:
+                    with Loader(
+                        "\033[92m" + "Please wait while getting your data...",
+                        "Thanks for waiting!"
+                    ):
+                        print("\n\n" + "\033[0m" + student.advisor + "\n")
+            elif choice == "Back to Previous Menu":
+                self.__academic_menu
+                break
+            elif choice == "Main Menu":
+                self.__main_menu
+                break
+            elif choice == "Exit":
+                print("Thank you for using EJUSTIAN CLI!")
+                print("Bye!\n")
+                exit()
+
+    @property
+    def __schedule_menu(self):
+        menu = [
+            inquirer.List(
+                "schedule",
+                message="What do you want to do?",
+                choices=[
+                    "Show Schedule",
+                    "Export Schedule to PDF",
+                    "Export Schedule to Your Google Calendar",
+                    "Back to Previous Menu",
+                    "Main Menu",
+                    "Exit"
+                ],
+                default="Show Schedule"
+            ),
+        ]
+
+        while True:
+            choice = inquirer.prompt(menu)["schedule"]
+
+            if choice == "Show Schedule":
+                if student := self.__student:
+                    with Loader(
+                        "\033[92m" + "Please wait while getting your data...",
+                        "Thanks for waiting!"
+                    ):
+                        print("\n\n" + "\033[0m" +
+                              student.show_calendar + "\n")
+            elif choice == "Export Schedule to PDF":
+                if student := self.__student:
+                    with Loader(
+                        "\033[92m" +
+                            "Please wait while exporting your calendar...",
+                        "Thanks for waiting!"
+                    ):
+                        student.pdf_calendar
+
+                        print(
+                            "\033[92m" +
+                            f"\nYour schedule has been exported to {os.getcwd()}" +
+                            "\033[0m"
+                        )
+            elif choice == "Export Schedule to Your Google Calendar":
+                if student := self.__student:
+                    with Loader(
+                        "\033[92m" +
+                            "Please wait while exporting your calendar...",
+                        "Thanks for waiting!"
+                    ):
+                        student.export_calendar
+
+                        print(
+                            "\033[92m" +
+                            "Your schedule has been exported to your Google Calendar" +
+                            "\033[0m"
+                        )
+            elif choice == "Back to Previous Menu":
+                self.__academic_menu
+                break
+            elif choice == "Main Menu":
+                self.__main_menu
+                break
+            elif choice == "Exit":
+                print("Thank you for using EJUSTIAN CLI!")
+                print("Bye!\n")
+                exit()
+
+    @property
+    def __personal_menu(self):
+        menu = [
+            inquirer.List(
+                "personal",
+                message="What do you want to do?",
+                choices=[
+                    "Task Manager (Kanban Style)",
+                    "Personal Attendance Tracker",
+                    "Main Menu",
+                    "Exit",
+                ],
+                default="Task Manager (Kanban Style)"
+            ),
+        ]
+
+        while True:
+            choice = inquirer.prompt(menu)["personal"]
+
+            if choice == "Task Manager (Kanban Style)":
+                self.__task_manager
+            elif choice == "Personal Attendance Tracker":
+                self.__personal_attendance
+            elif choice == "Main Menu":
+                self.__main_menu
+                break
+            elif choice == "Exit":
+                print("Thank you for using EJUSTIAN CLI!")
+                print("Bye!\n")
+                exit()
+
+    @property
+    def __wifi(self) -> None:
+        print("Coming Soon!\n")
+
+    @property
+    def __ejust_map(self) -> None:
+        print(MAP)
+
+    @property
+    def __task_manager(self) -> None:
+        start_kanban()
+
+    @property
+    def __personal_attendance(self) -> None:
+        print("Coming Soon!\n")
+
+    @property
+    def chek_for_updates(self) -> None:
+        pass
 
 
 if __name__ == "__main__":
-    main()
+    EJUSTIAN()
