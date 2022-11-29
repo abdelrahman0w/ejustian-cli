@@ -6,14 +6,14 @@ with open('README.md', 'r') as f:
 
 
 setup(
-    name='ejustian-cli',
+    name='ej_cli',
     description='''
                 \rA command line interface app that allows EJUST students to manage all their stuff.
                 ''',
     long_description=readme,
     long_description_content_type='text/markdown',
     version='0.1.0',
-    author='Abdelrahman Abdelkhalek',
+    author='Abdelrahman Wael Abdelkhalek',
     author_email='abdelrahman0w@gmail.com',
     packages=[
         'ej_cli', 'ej_cli.sis', 'ej_cli.loader',

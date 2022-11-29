@@ -8,6 +8,7 @@ from tabulate import tabulate
 from .regex import matches
 from .schedule import Course, WeekDay, Schedule
 from .gcalendar import Calendar
+from .template import MD_DATA
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -384,10 +385,7 @@ class SIS:
             ],
             tablefmt="github"
         )
-
-        with open(os.path.join(BASE_DIR, "calendar.md"), "r") as f:
-            md_data = f.read()
-
+        md_data = MD_DATA
         md_data = md_data.replace("{{ID}}", self.id)
         md_data = md_data.replace("{{TABLE}}", table)
         headers = {
