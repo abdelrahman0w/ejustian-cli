@@ -15,6 +15,7 @@ setup(
     version='0.1.0',
     author='Abdelrahman Wael Abdelkhalek',
     author_email='abdelrahman0w@gmail.com',
+    home_page='https://github.com/Abdelrahman0W/ejustian-cli',
     packages=[
         'ej_cli', 'ej_cli.sis', 'ej_cli.loader',
         'ej_cli.map', 'ej_cli.wifi', 'ej_cli.kanban',
