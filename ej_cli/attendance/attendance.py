@@ -9,14 +9,14 @@ class AttendanceTracker():
 
     def __init__(self) -> None: 
         try : 
-            with open(os.path.join(PARENT_DIR, "saved", "attendance.json","r" )) as f:
+            with open(os.path.join(PARENT_DIR, "saved", "attendance.json" ),"r") as f:
                 self.attendance = json.load(f)
         except Exception: 
-            with open(os.path.join(PARENT_DIR, "saved", "attendance.json","w+" )) as f:
+            with open(os.path.join(PARENT_DIR, "saved", "attendance.json" ),"w+") as f:
                 self.attendance = dict()
 
     def save(self) -> None:
-        with open(os.path.join(PARENT_DIR, "saved", "attendance.json","r" )) as f:
+        with open(os.path.join(PARENT_DIR, "saved", "attendance.json"),"r" ) as f:
             json.dump(self.attendance,f)
     
     def add_course(self, course_code:str) -> None:
