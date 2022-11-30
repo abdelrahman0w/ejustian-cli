@@ -6,7 +6,7 @@ with open('README.md', 'r') as f:
 
 
 setup(
-    name='ej_cli',
+    name='ejustian_cli',
     description='''
                 \rA command line interface app that allows EJUST students to manage all their stuff.
                 ''',
