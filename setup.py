@@ -12,7 +12,7 @@ setup(
                 ''',
     long_description=readme,
     long_description_content_type='text/markdown',
-    version='0.1.0',
+    version='1.0.0',
     author='Abdelrahman Wael Abdelkhalek',
     author_email='abdelrahman0w@gmail.com',
     home_page='https://github.com/Abdelrahman0W/ejustian-cli',
