@@ -1,5 +1,5 @@
 # Changelog
 
-## v0.1.0 (24/08/2021)
+## v0.1.0
 
 - First release of `ej_cli`
